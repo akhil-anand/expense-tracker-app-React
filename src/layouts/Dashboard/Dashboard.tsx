@@ -30,7 +30,7 @@ const Dashboard = () => {
     },
     {
       field: 'dateOfPurchase',
-      headerName: 'DOB',
+      headerName: 'Date',
       width: 150,
       editable: true,
     },
