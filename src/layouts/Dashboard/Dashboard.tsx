@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import DataGridComponent from '../../components/data-grid/DataGridComponent'
 import BarChartComponent from '../../components/bar-chart/BarChartComponent'
-import { Box, Button, Container, IconButton } from '@mui/material'
+import { Box, Button, CircularProgress, Container, IconButton } from '@mui/material'
 import moment from 'moment'
 import axios from 'axios'
 import { GridColDef } from '@mui/x-data-grid'
@@ -46,7 +46,7 @@ const Dashboard = () => {
       type: 'actions',
       getActions: (params: any) => [
         <IconButton > <EditIcon /></IconButton>,
-        <IconButton onClick={()=>deleteExpense(params?.id)}> <DeleteForeverIcon /></IconButton>,
+        <IconButton onClick={() => deleteExpense(params?.id)}> <DeleteForeverIcon /></IconButton>,
       ],
       width: 100
     }
@@ -169,7 +169,7 @@ const Dashboard = () => {
   //   })
   // }
 
-  const deleteExpense = async (id:any) => {
+  const deleteExpense = async (id: any) => {
     setFetchingData(true)
     await axios.delete(`https://shimmering-marsh-raisin.glitch.me/deleteExpense/${id}`)
       .then((res) => {
@@ -187,10 +187,13 @@ const Dashboard = () => {
   return (
     <Container style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100vh' }}>
       <Box>
-
-        <BarChartComponent graph_data={chartData} />
+        {fetchingData ?
+          <CircularProgress />
+          :
+          <BarChartComponent graph_data={chartData} />
+        }
       </Box>
-      <DataGridComponent rows={expensesData} columns={expensesColumn} />
+      <DataGridComponent rows={expensesData} columns={expensesColumn} loading={fetchingData} />
     </Container>
   )
 }
