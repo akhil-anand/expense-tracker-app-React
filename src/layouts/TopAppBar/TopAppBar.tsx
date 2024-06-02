@@ -6,7 +6,6 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import GridViewIcon from '@mui/icons-material/GridView';
 import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
 
-import { styled } from '@mui/system';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { StyledAppBar } from './TopAppBarStyles';
 
