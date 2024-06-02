@@ -6,7 +6,7 @@ import TopAppBar from './layouts/TopAppBar/TopAppBar'
 
 const RoutesComponent = () => {
     return (
-        <BrowserRouter>
+        <BrowserRouter basename="/expense-tracker-app-React">
         <TopAppBar />
             <Routes>
                 <Route path="/addExpense" element={<AddPayment />} />
