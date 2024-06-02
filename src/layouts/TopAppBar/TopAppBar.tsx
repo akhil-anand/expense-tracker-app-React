@@ -20,7 +20,7 @@ const TopAppBar = () => {
           <MenuIcon />
         </IconButton>
         <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-          Your App Name
+          Expense Tracker
         </Typography>
         <IconButton color="inherit" onClick={() => navigate('../')}>
           <ArrowBackIcon /> Go back
