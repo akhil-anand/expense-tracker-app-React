@@ -1,6 +1,6 @@
 {
   "name": "expense-tracker-app",
-  "homepage": "https://akhil-anand.github.io/expense-tracker-app-React/",
+  "homepage": "https://akhil-anand.github.io/expense-tracker-app-React",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -56,5 +56,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "gh-pages": "^6.1.1"
   }
 }
