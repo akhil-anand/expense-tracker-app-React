@@ -7,6 +7,7 @@ import { useNavigate } from 'react-router-dom'
 import CategoryComponent from '../../components/category-component/CategoryComponent'
 
 import AddIcon from '@mui/icons-material/Add';
+import { LoadingButton } from '@mui/lab';
 import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
 import { addExpenseToDB } from '../../commonMethods'
 import './AddPayment.css'
@@ -16,12 +17,14 @@ const AddPayment = () => {
 
     const [formData, setFormData] = useState({ amount: 0, category: null, description: null })
     const [showError, setShowError] = useState('')
+    const [isLoading, setIsLoading] = useState(false)
     const navigate = useNavigate()
 
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         event.stopPropagation();
-
+        
+        setIsLoading(true)
         if (formData?.category && formData?.description && formData?.amount) {
             const response = await addExpenseToDB({
                 price: formData?.amount,
@@ -31,13 +34,14 @@ const AddPayment = () => {
                 month: new Date().getMonth() < 10 ? ('0' + (new Date().getMonth() + 1)) : (new Date().getMonth() + 1),
                 year: new Date().getFullYear()
             })
-            if(response === 'success'){
-                setFormData({ amount: 0, category: null, description: null })    
-                displaySuccessMessage()            
+            if (response === 'success') {
+                setFormData({ amount: 0, category: null, description: null })
+                displaySuccessMessage()
             }
         } else {
             setShowError('Select all fields')
         }
+        setIsLoading(false)
     }
 
     const displaySuccessMessage = () => {
@@ -87,8 +91,9 @@ const AddPayment = () => {
                 />
                 <CategoryComponent value={formData?.category} updateCategory={handleCategoryChange} />
                 <Box sx={{ display: 'flex', gap: 2 }}>
-                    <CustomTextButton type='submit' variant="contained" sx={{ borderRadius: 5 }} color="success">
-                        <AddShoppingCartIcon /></CustomTextButton>
+                    <LoadingButton loading={isLoading} type='submit' variant="contained" sx={{ borderRadius: 5 }} color="success">
+                        <AddShoppingCartIcon />
+                    </LoadingButton>
                     <CustomTextButton variant="outlined" sx={{ borderRadius: 5 }} onClick={() => navigate('/dashboard')}>DashBoard</CustomTextButton>
                 </Box>
             </Box>
