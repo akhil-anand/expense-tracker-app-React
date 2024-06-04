@@ -118,7 +118,7 @@ const Dashboard = () => {
         {fetchingData ? <CircularProgress /> : <BarChartComponent graph_data={chartData} />}
       </Box>
       <Box sx={{ width: '100%', overflowX: 'auto' }}>
-        <DataGridComponent rows={expensesData} columns={expensesColumn} loading={fetchingData} />
+        <DataGridComponent rows={expensesData} columns={expensesColumn} loading={fetchingData} checkboxSelection={!isMobile} />
       </Box>
     </Container>
   );
