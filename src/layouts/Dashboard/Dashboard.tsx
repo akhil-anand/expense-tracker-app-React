@@ -128,14 +128,14 @@ const Dashboard = () => {
       flexDirection: 'column',
       alignItems: 'center',
       justifyContent: 'center',
-      height: '100vh',
+      height: '100%',
       padding: isMobile ? '16px' : '32px',
     }}>
       <Box sx={{
         display: 'flex',
         flexDirection: isMobile ? 'column' : 'row',
         width: '100%',
-        mt: isMobile ? 2 : 20,
+        // mt: isMobile ? 2 : 20,
         mb: isMobile ? 2 : 4,
       }}>
         {fetchingData ? (
