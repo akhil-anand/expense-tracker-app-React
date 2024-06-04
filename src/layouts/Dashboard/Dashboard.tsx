@@ -19,6 +19,12 @@ const Dashboard = () => {
 
   const expensesColumn: GridColDef[] = [
     {
+      field: 'description',
+      headerName: 'Descriptions',
+      width: 150,
+      editable: true,
+    },
+    {
       field: 'category',
       headerName: 'Category',
       width: 150,
@@ -27,12 +33,6 @@ const Dashboard = () => {
     {
       field: 'dateOfPurchase',
       headerName: 'Date',
-      width: 150,
-      editable: true,
-    },
-    {
-      field: 'description',
-      headerName: 'Descriptions',
       width: 150,
       editable: true,
     },
