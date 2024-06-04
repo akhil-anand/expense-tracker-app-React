@@ -44,8 +44,8 @@ const TopAppBar = () => {
                             </Typography>
                         </IconButton>
                     </NavLink> */}
-                    {menuItems?.map(({ label, url, icon }) =>
-                        <NavLink to={url}>
+                    {menuItems?.map(({ label, url, icon }, index) =>
+                        <NavLink to={url} key={label + index}>
                             <IconButton sx={{color: 'white', gap:0.1}}>
                                 {icon}
                                 <Typography>
