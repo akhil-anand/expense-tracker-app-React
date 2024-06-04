@@ -1,53 +1,71 @@
-import React, { useEffect, useState } from 'react'
-import Chart from "react-apexcharts";
+import React, { useEffect, useState } from 'react';
+import Chart from 'react-apexcharts';
 
-const BarChartComponent = ({graph_data}:any) => {
+const BarChartComponent = ({ graph_data }: any) => {
   const [chartData, setChartData] = useState({
     options: {
       chart: {
-        id: "basic-bar"
+        id: 'basic-bar',
+        responsive: [
+          {
+            breakpoint: 768,
+            options: {
+              chart: {
+                width: '100%'
+              },
+              plotOptions: {
+                bar: {
+                  horizontal: false
+                }
+              },
+              xaxis: {
+                categories: []
+              }
+            }
+          }
+        ]
       },
       xaxis: {
         categories: []
       }
-    }, series: [
+    },
+    series: [
       {
-        name: "Expenses",
+        name: 'Expenses',
         data: []
       }
     ]
-  })
+  });
 
   useEffect(() => {
-    if (chartData) {
-      setChartData((prevState:any) => {
-        return {
-          options: {
-            ...prevState?.options,
-            xaxis: {
-              categories: graph_data?.categories
-            }
-          },
-            series: [
-              {
-                name: "Expenses",
-                data: graph_data?.values
-              }
-            ]
-          
-        }
-      })
+    if (graph_data) {
+      setChartData((prevState: any) => ({
+        options: {
+          ...prevState.options,
+          xaxis: {
+            categories: graph_data.categories
+          }
+        },
+        series: [
+          {
+            name: 'Expenses',
+            data: graph_data.values
+          }
+        ]
+      }));
     }
-  }, [graph_data])
+  }, [graph_data]);
 
   return (
-    <Chart
-      options={chartData.options}
-      series={chartData.series}
-      type="bar"
-      width="500"
-    />
-  )
-}
+    <div style={{ width: '100%' }}>
+      <Chart
+        options={chartData.options}
+        series={chartData.series}
+        type="bar"
+        width="100%"
+      />
+    </div>
+  );
+};
 
-export default BarChartComponent
+export default BarChartComponent;

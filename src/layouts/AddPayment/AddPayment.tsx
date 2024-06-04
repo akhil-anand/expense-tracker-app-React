@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Box, Container, InputAdornment, Typography } from '@mui/material'
+import { Box, Container, InputAdornment, Typography, useMediaQuery, useTheme } from '@mui/material'
 import { CustomTextButton } from '../../components/text-button/TextButton'
 import { CustomTextInput } from '../../components/text-input/TextInput'
 import { useNavigate } from 'react-router-dom'
@@ -14,13 +14,14 @@ import './AddPayment.css'
 import moment from 'moment'
 
 const AddPayment = () => {
-
     const [formData, setFormData] = useState({ amount: 0, category: null, description: null })
     const [showError, setShowError] = useState('')
     const [isLoading, setIsLoading] = useState(false)
     const navigate = useNavigate()
+    const theme = useTheme()
+    const isMobile = useMediaQuery(theme.breakpoints.down('sm'))
 
-    const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    const handleSubmit = async (event:any) => {
         event.preventDefault();
         event.stopPropagation();
         
@@ -45,7 +46,7 @@ const AddPayment = () => {
     }
 
     const displaySuccessMessage = () => {
-        setShowError('SuccessFully Added the record')
+        setShowError('Successfully Added the record')
         setTimeout(() => {
             setShowError('')
         }, 5000);
@@ -58,19 +59,19 @@ const AddPayment = () => {
         }
     }
 
-
     return (
-        <Container style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100vh' }}>
-            <Typography variant='h4' style={{ color: '#333', fontWeight: 'bold', marginBottom: '16px' }}>Add Expense</Typography>
+        <Container style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100vh', padding: isMobile ? '16px' : '0' }}>
+            <Typography variant='h4' style={{ color: '#333', fontWeight: 'bold', marginBottom: '16px', textAlign: 'center' }}>Add Expense</Typography>
             <Box component="form" onSubmit={handleSubmit}
                 sx={{
                     display: 'flex',
-                    flexDirection: 'Column',
+                    flexDirection: 'column',
                     justifyContent: 'center',
                     alignItems: 'center',
                     margin: 2,
                     gap: 2,
-                    minWidth: 500
+                    minWidth: isMobile ? '100%' : 500,
+                    width: isMobile ? '100%' : 'auto'
                 }}>
                 <CustomTextInput
                     type='number'
@@ -83,14 +84,13 @@ const AddPayment = () => {
                     }}
                 />
 
-                <CustomTextInput value={formData?.description ?? ''} onChange={(event) => handleCategoryChange(event.target.value, 'description')} size='small' label="Enter Description"
+                <CustomTextInput value={formData?.description ?? ''} onChange={(event:any) => handleCategoryChange(event.target.value, 'description')} size='small' label="Enter Description"
                     InputProps={{
                         startAdornment: <InputAdornment position="start">☴</InputAdornment>,
-                    }
-                    }
+                    }}
                 />
                 <CategoryComponent value={formData?.category} updateCategory={handleCategoryChange} />
-                <Box sx={{ display: 'flex', gap: 2 }}>
+                <Box sx={{ display: 'flex', flexDirection: isMobile ? 'column' : 'row', gap: 2 }}>
                     <LoadingButton loading={isLoading} type='submit' variant="contained" sx={{ borderRadius: 5 }} color="success">
                         <AddShoppingCartIcon />
                     </LoadingButton>
