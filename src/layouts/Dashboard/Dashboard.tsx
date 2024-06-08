@@ -33,7 +33,7 @@ const Dashboard = () => {
       headerName: 'Amount',
       width: 150,
       editable: true,
-      renderCell: (params) => `₹${params?.value} /-`
+      renderCell: (params) => `₹${params?.value}/-`
     },
     {
       field: 'dateOfPurchase',
