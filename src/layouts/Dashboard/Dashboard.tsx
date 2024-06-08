@@ -29,6 +29,12 @@ const Dashboard = () => {
       editable: true,
     },
     {
+      field: 'price',
+      headerName: 'Amount',
+      width: 150,
+      editable: true,
+    },
+    {
       field: 'dateOfPurchase',
       headerName: 'Date',
       width: 150,
