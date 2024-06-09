@@ -42,7 +42,7 @@ const DataGridComponent = ({ rows, columns, loading, checkboxSelection, disableC
 
 
   return (
-    <Box sx={{ height: 400, width: '100%', border: '1px solid #0a6cf5', borderRadius: '4px', bgcolor: '#f9f9f980' }}>
+    <Box sx={{ height: 400, width: '100%', border: '1px solid #0a6cf5', borderRadius: '4px', bgcolor: '#ffffff80' }}>
       <DataGrid
         rows={rowsData}
         columns={columnsData}
