@@ -29,30 +29,32 @@ const Dashboard = () => {
     {
       field: 'category',
       headerName: 'Category',
-      flex: 1,
-      // width: 150,
+      flex: isMobile ? 0 : 1,
+      width: 90,
       // editable: true,
-      sortable: false,
+      sortable: !isMobile,
       // renderCell: (params) => `₹${params?.value}/-`
     },
     {
       field: 'price',
       headerName: 'Amount',
-      flex: 1,
-      // width: 150,
+      flex: isMobile ? 0 : 1,
+      width: 80,
       // editable: true,
+      sortable: !isMobile,
       renderCell: (params) => `₹${params?.value}/-`
     },
     {
       field: 'dateOfPurchase',
       headerName: 'Date',
-      flex: 1,
+      flex: isMobile ? 0 : 1,
       // type: 'date',
+      sortable: !isMobile,
       valueFormatter(params) {
         return moment(new Date(params?.value)).format('DD/MM/YYYY')
       },
       // valueSetter: (params) => moment(new Date(params?.value)).format('DD/MM/YYYY'),
-      // width: 150,
+      width: 40,
       // editable: true,
       renderCell: (params) => `${isMobile ? moment(new Date(params?.value)).format('DD') : moment(new Date(params?.value)).format('DD/MM/YYYY')}`
     },
@@ -60,6 +62,7 @@ const Dashboard = () => {
       field: 'description',
       headerName: 'Descriptions',
       flex: 1,
+      sortable: !isMobile,
       // width: 150,
       // editable: true,
     },
@@ -229,7 +232,7 @@ const Dashboard = () => {
           checkboxSelection={!isMobile}
           disableColumnMenu={isMobile}
           density={isMobile ? 'compact' : 'standard'}
-          hideToolbar={isMobile ? true : false}
+          hideToolbar={isMobile}
           pageSize={isMobile ? 10 : 5}
         />
       </Box>
