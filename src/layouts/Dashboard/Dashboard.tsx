@@ -29,31 +29,36 @@ const Dashboard = () => {
     {
       field: 'category',
       headerName: 'Category',
+      flex: 1,
       width: 150,
-      editable: true,
+      // editable: true,
     },
     {
       field: 'price',
       headerName: 'Amount',
+      flex: 1,
       width: 150,
-      editable: true,
+      // editable: true,
       renderCell: (params) => `₹${params?.value}/-`
     },
     {
       field: 'dateOfPurchase',
       headerName: 'Date',
+      flex: 1,
       width: 150,
-      editable: true,
+      // editable: true,
     },
     {
       field: 'description',
       headerName: 'Descriptions',
+      flex: 1,
       width: 150,
-      editable: true,
+      // editable: true,
     },
     {
       field: 'action',
       headerName: 'Actions',
+      flex: 1,
       type: 'actions',
       getActions: (params: any) => [
         <IconButton onClick={() => handleEdit(params.row)}><EditIcon /></IconButton>,
