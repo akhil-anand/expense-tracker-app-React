@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import Box from '@mui/material/Box';
 import { DataGrid, GridColDef, GridToolbar, GridValueGetterParams } from '@mui/x-data-grid';
 
-const DataGridComponent = ({ rows, columns, loading, checkboxSelection, disableColumnMenu, density, hideToolbar }: any) => {
+const DataGridComponent = ({ rows, columns, loading, checkboxSelection, disableColumnMenu, density, hideToolbar, pageSize }: any) => {
 
   const [columnsData, setColumnsData] = useState<any>([
     {
@@ -49,13 +49,13 @@ const DataGridComponent = ({ rows, columns, loading, checkboxSelection, disableC
         initialState={{
           pagination: {
             paginationModel: {
-              pageSize: 5,
+              pageSize: pageSize,
             },
           },
         }}
         disableColumnMenu={disableColumnMenu}
         loading={loading}
-        pageSizeOptions={[5]}
+        pageSizeOptions={[5, 10, 20, 50, 100]}
         checkboxSelection={checkboxSelection}
         disableRowSelectionOnClick
         slots={{ toolbar: hideToolbar ? null : GridToolbar }}

@@ -227,6 +227,7 @@ const Dashboard = () => {
         disableColumnMenu={isMobile} 
         density={isMobile ? 'compact' : 'standard'}
         hideToolbar={isMobile ? true : false}
+        pageSize={isMobile ? 10 : 5}
         />
       </Box>
     </Container>
