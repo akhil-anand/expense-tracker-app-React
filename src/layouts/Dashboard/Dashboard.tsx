@@ -54,7 +54,7 @@ const Dashboard = () => {
         return moment(new Date(params?.value)).format('DD/MM/YYYY')
       },
       // valueSetter: (params) => moment(new Date(params?.value)).format('DD/MM/YYYY'),
-      width: 40,
+      width: 60,
       // editable: true,
       renderCell: (params) => `${isMobile ? moment(new Date(params?.value)).format('DD') : moment(new Date(params?.value)).format('DD/MM/YYYY')}`
     },
