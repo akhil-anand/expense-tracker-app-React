@@ -30,14 +30,16 @@ const Dashboard = () => {
       field: 'category',
       headerName: 'Category',
       flex: 1,
-      width: 150,
+      // width: 150,
       // editable: true,
+      sortable: false,
+      // renderCell: (params) => `₹${params?.value}/-`
     },
     {
       field: 'price',
       headerName: 'Amount',
       flex: 1,
-      width: 150,
+      // width: 150,
       // editable: true,
       renderCell: (params) => `₹${params?.value}/-`
     },
@@ -45,14 +47,19 @@ const Dashboard = () => {
       field: 'dateOfPurchase',
       headerName: 'Date',
       flex: 1,
-      width: 150,
+      type: 'date',
+      valueFormatter(params) {
+        return new Date(params?.value)
+      },
+      // width: 150,
       // editable: true,
+      renderCell: (params) => `${isMobile ? moment(new Date(params?.value)).format('DD') : moment(new Date(params?.value)).format('DD/MM/YYYY')}`
     },
     {
       field: 'description',
       headerName: 'Descriptions',
       flex: 1,
-      width: 150,
+      // width: 150,
       // editable: true,
     },
     // {
@@ -212,7 +219,15 @@ const Dashboard = () => {
         )}
       </Box>
       <Box sx={{ width: '100%', flexGrow: 1 }}>
-        <DataGridComponent rows={expensesData} columns={expensesColumn} loading={fetchingData} checkboxSelection={!isMobile} />
+        <DataGridComponent 
+        rows={expensesData} 
+        columns={expensesColumn} 
+        loading={fetchingData} 
+        checkboxSelection={!isMobile} 
+        disableColumnMenu={isMobile} 
+        density={isMobile ? 'compact' : 'standard'}
+        hideToolbar={isMobile ? true : false}
+        />
       </Box>
     </Container>
   );

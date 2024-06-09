@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import Box from '@mui/material/Box';
 import { DataGrid, GridColDef, GridToolbar, GridValueGetterParams } from '@mui/x-data-grid';
 
-const DataGridComponent = ({ rows, columns, loading, checkboxSelection }: any) => {
+const DataGridComponent = ({ rows, columns, loading, checkboxSelection, disableColumnMenu, density, hideToolbar }: any) => {
 
   const [columnsData, setColumnsData] = useState<any>([
     {
@@ -42,7 +42,7 @@ const DataGridComponent = ({ rows, columns, loading, checkboxSelection }: any) =
 
 
   return (
-    <Box sx={{ height: 400, width: '100%' }}>
+    <Box sx={{ height: 400, width: '100%', border: '1px solid #0a6cf5', borderRadius: '4px', bgcolor: '#f9f9f9' }}>
       <DataGrid
         rows={rowsData}
         columns={columnsData}
@@ -53,11 +53,14 @@ const DataGridComponent = ({ rows, columns, loading, checkboxSelection }: any) =
             },
           },
         }}
+        disableColumnMenu={disableColumnMenu}
         loading={loading}
         pageSizeOptions={[5]}
         checkboxSelection={checkboxSelection}
         disableRowSelectionOnClick
-        slots={{ toolbar: GridToolbar }}
+        slots={{ toolbar: hideToolbar ? null : GridToolbar }}
+        density={density}
+        sx={{ '& .MuiDataGrid-columnsContainer': { borderBottom: '1px solid #9cd9ff' } }} // Adding border bottom to column headers
       />
     </Box>
   )

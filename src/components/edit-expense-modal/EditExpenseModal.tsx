@@ -23,13 +23,13 @@ const ExpenseModal = ({ open, handleClose, expense, refreshExpenses }: any) => {
     useEffect(() => {
 
         if (expense) {
-            const date:any = dayjs(moment(expense?.dateOfPurchase).format('DD-MM-YYYY'));
+            const date:any = dayjs(moment(expense?.dateOfPurchase).format('MM-DD-YYYY'));
             const month:any = date ? dayjs(date).month() + 1 : '';
             setFormData({
                 price: expense.price,
                 category: expense.category,
                 description: expense.description,
-                dateOfPurchase: moment(expense?.dateOfPurchase).format('DD-MM-YYYY'),
+                dateOfPurchase: new Date(expense?.dateOfPurchase),
                 month: Number(month) < 10 ? `0${month}` : `${month}`,
                 year: date.year()
             });
@@ -47,7 +47,7 @@ const handleDateChange = (date:any) => {
     const formattedDate = date ? `${date.toDate()}/${formattedMonth}/${date.year()}` : ''; // Format the date string
     setFormData({
         ...formData,
-        dateOfPurchase: moment(date.toDate()).format('DD-MM-YYYY'),
+        dateOfPurchase: new Date(date.toDate()),
         month: formattedMonth, // Update the month in the state
         year: date ? dayjs(date).year() : '', // Update the year in the state
     });

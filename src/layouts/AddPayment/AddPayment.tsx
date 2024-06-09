@@ -31,7 +31,7 @@ const AddPayment = () => {
                 price: formData?.amount,
                 category: formData?.category,
                 description: formData?.description,
-                dateOfPurchase: moment(new Date()).format('DD-MM-YYYY'),
+                dateOfPurchase: new Date(),
                 month: new Date().getMonth() < 10 ? ('0' + (new Date().getMonth() + 1)) : (new Date().getMonth() + 1),
                 year: new Date().getFullYear()
             })
