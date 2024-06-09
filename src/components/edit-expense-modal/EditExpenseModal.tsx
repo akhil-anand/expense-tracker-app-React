@@ -9,6 +9,7 @@ import moment from 'moment';
 import { LoadingButton } from '@mui/lab';
 
 const ExpenseModal = ({ open, handleClose, expense, refreshExpenses }: any) => {
+
     const [formData, setFormData] = useState<any>({
         price: '',
         category: '',
@@ -20,14 +21,16 @@ const ExpenseModal = ({ open, handleClose, expense, refreshExpenses }: any) => {
     const [loading, setLoading] = useState(false);
 
     useEffect(() => {
+
         if (expense) {
             const date:any = dayjs(moment(expense?.dateOfPurchase).format('DD-MM-YYYY'));
+            const month:any = date ? dayjs(date).month() + 1 : '';
             setFormData({
                 price: expense.price,
                 category: expense.category,
                 description: expense.description,
-                dateOfPurchase: date,
-                month: date.month() + 1,
+                dateOfPurchase: moment(expense?.dateOfPurchase).format('DD-MM-YYYY'),
+                month: Number(month) < 10 ? `0${month}` : `${month}`,
                 year: date.year()
             });
         }
@@ -56,8 +59,8 @@ const handleDateChange = (date:any) => {
         setLoading(true);
         try {
             await axios.put(`https://shimmering-marsh-raisin.glitch.me/updateExpense/${expense._id}`, formData);
-            refreshExpenses();
             handleClose();
+            refreshExpenses();
         } catch (error) {
             console.error('Failed to update expense', error);
         } finally {

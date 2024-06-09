@@ -92,7 +92,7 @@ const Dashboard = () => {
             count1 += item.price;
           }
         });
-        setExpensesData(dataGrid_data);
+        setExpensesData(dataGrid_data?.reverse());
         setChartData({
           categories: ['Groceries', 'Utilities', 'Gas', 'Social'],
           values: [count1, count2, count3, count4],
@@ -139,6 +139,7 @@ const Dashboard = () => {
   };
 
   const handleModalClose = () => {
+    console.log('changing modal state')
     setIsModalOpen(false);
     setSelectedExpense(null);
   };
@@ -163,7 +164,7 @@ const Dashboard = () => {
       height: '100%',
       padding: isMobile ? '16px' : '32px',
     }}>
-      <EditExpenseModal open={isModalOpen} handleClose={handleModalClose} expense={selectedExpense} handleSave={handleSave} />
+      <EditExpenseModal open={isModalOpen} handleClose={handleModalClose} expense={selectedExpense} handleSave={handleSave} refreshExpenses={fetchMonthlyExpenseData}/>
       <AlertDialog
         open={openAlert}
         handleClose={handleCloseAlert}
