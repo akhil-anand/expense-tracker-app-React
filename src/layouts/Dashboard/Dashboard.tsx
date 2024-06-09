@@ -55,18 +55,31 @@ const Dashboard = () => {
       width: 150,
       // editable: true,
     },
-    {
+    // {
+    //   field: 'action',
+    //   headerName: 'Actions',
+    //   flex: 1,
+    //   type: 'actions',
+    //   getActions: (params: any) => [
+    //     <IconButton onClick={() => handleEdit(params.row)}><EditIcon /></IconButton>,
+    //     <IconButton onClick={() => handleOpenAlert(params.id)}><DeleteForeverIcon /></IconButton>,
+    //   ],
+    //   width: 100
+    // }
+  ];
+
+  if (!isMobile) {
+    expensesColumn.push({
       field: 'action',
       headerName: 'Actions',
-      flex: 1,
       type: 'actions',
       getActions: (params: any) => [
         <IconButton onClick={() => handleEdit(params.row)}><EditIcon /></IconButton>,
         <IconButton onClick={() => handleOpenAlert(params.id)}><DeleteForeverIcon /></IconButton>,
       ],
-      width: 100
-    }
-  ];
+      flex: 1,
+    });
+  }
 
   useEffect(() => {
     fetchMonthlyExpenseData();
