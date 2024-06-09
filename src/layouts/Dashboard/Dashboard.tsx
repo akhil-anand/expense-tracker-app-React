@@ -9,6 +9,7 @@ import { GridColDef } from '@mui/x-data-grid';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import EditIcon from '@mui/icons-material/Edit';
 import PieChartComponent from '../../components/pie-chart/PieChartComponent';
+import EditExpenseModal from '../../components/edit-expense-modal/EditExpenseModal';
 
 const Dashboard = () => {
   const [currentDate, setCurrentDate] = useState(new Date());
@@ -17,6 +18,9 @@ const Dashboard = () => {
   const [fetchingData, setFetchingData] = useState(false);
   const [openAlert, setOpenAlert] = useState(false);
   const [deleteId, setDeleteId] = useState(null);
+
+  const [selectedExpense, setSelectedExpense] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
@@ -52,7 +56,7 @@ const Dashboard = () => {
       headerName: 'Actions',
       type: 'actions',
       getActions: (params: any) => [
-        <IconButton><EditIcon /></IconButton>,
+        <IconButton onClick={() => handleEdit(params.row)}><EditIcon /></IconButton>,
         <IconButton onClick={() => handleOpenAlert(params.id)}><DeleteForeverIcon /></IconButton>,
       ],
       width: 100
@@ -115,7 +119,7 @@ const Dashboard = () => {
 
   const handleConfirmDelete = async () => {
     setFetchingData(true);
-    await axios.delete(`https://shimmering-marsh-raisin.glitch.me/deleteExpense/${deleteId}`)
+    await axios.delete(`https://your-api-url.com/deleteExpense/${deleteId}`)
       .then((res) => {
         console.log('Successfully deleted the expense');
         fetchMonthlyExpenseData();
@@ -129,6 +133,27 @@ const Dashboard = () => {
       });
   };
 
+  const handleEdit = (expense: any) => {
+    setSelectedExpense(expense);
+    setIsModalOpen(true);
+  };
+
+  const handleModalClose = () => {
+    setIsModalOpen(false);
+    setSelectedExpense(null);
+  };
+
+  const handleSave = async (updatedExpense: any) => {
+    setFetchingData(true);
+    try {
+      await axios.put(`https://your-api-url.com/updateExpense/${updatedExpense.id}`, updatedExpense);
+      fetchMonthlyExpenseData();
+    } catch (error) {
+      console.error(error);
+      setFetchingData(false);
+    }
+  };
+
   return (
     <Container sx={{
       display: 'flex',
@@ -138,6 +163,12 @@ const Dashboard = () => {
       height: '100%',
       padding: isMobile ? '16px' : '32px',
     }}>
+      <EditExpenseModal open={isModalOpen} handleClose={handleModalClose} expense={selectedExpense} handleSave={handleSave} />
+      <AlertDialog
+        open={openAlert}
+        handleClose={handleCloseAlert}
+        handleConfirm={handleConfirmDelete}
+      />
       <Box sx={{
         display: 'flex',
         flexDirection: isMobile ? 'column' : 'row',
@@ -161,16 +192,9 @@ const Dashboard = () => {
           </>
         )}
       </Box>
-
-
       <Box sx={{ width: '100%', flexGrow: 1 }}>
         <DataGridComponent rows={expensesData} columns={expensesColumn} loading={fetchingData} checkboxSelection={!isMobile} />
       </Box>
-      <AlertDialog
-        open={openAlert}
-        handleClose={handleCloseAlert}
-        handleConfirm={handleConfirmDelete}
-      />
     </Container>
   );
 };
