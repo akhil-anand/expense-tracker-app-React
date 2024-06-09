@@ -44,7 +44,7 @@ const handleDateChange = (date:any) => {
     const formattedDate = date ? `${date.toDate()}/${formattedMonth}/${date.year()}` : ''; // Format the date string
     setFormData({
         ...formData,
-        dateOfPurchase: date.toDate(),
+        dateOfPurchase: moment(date.toDate()).format('DD-MM-YYYY'),
         month: formattedMonth, // Update the month in the state
         year: date ? dayjs(date).year() : '', // Update the year in the state
     });
