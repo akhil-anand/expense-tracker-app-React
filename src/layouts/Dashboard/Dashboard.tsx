@@ -47,10 +47,11 @@ const Dashboard = () => {
       field: 'dateOfPurchase',
       headerName: 'Date',
       flex: 1,
-      type: 'date',
+      // type: 'date',
       valueFormatter(params) {
-        return new Date(params?.value)
+        return moment(new Date(params?.value)).format('DD/MM/YYYY')
       },
+      // valueSetter: (params) => moment(new Date(params?.value)).format('DD/MM/YYYY'),
       // width: 150,
       // editable: true,
       renderCell: (params) => `${isMobile ? moment(new Date(params?.value)).format('DD') : moment(new Date(params?.value)).format('DD/MM/YYYY')}`
@@ -66,7 +67,9 @@ const Dashboard = () => {
     //   field: 'action',
     //   headerName: 'Actions',
     //   flex: 1,
+    //   hideable: true,
     //   type: 'actions',
+    //   editable: true,
     //   getActions: (params: any) => [
     //     <IconButton onClick={() => handleEdit(params.row)}><EditIcon /></IconButton>,
     //     <IconButton onClick={() => handleOpenAlert(params.id)}><DeleteForeverIcon /></IconButton>,
@@ -189,7 +192,7 @@ const Dashboard = () => {
       height: '100%',
       padding: isMobile ? '16px' : '32px',
     }}>
-      <EditExpenseModal open={isModalOpen} handleClose={handleModalClose} expense={selectedExpense} handleSave={handleSave} refreshExpenses={fetchMonthlyExpenseData}/>
+      <EditExpenseModal open={isModalOpen} handleClose={handleModalClose} expense={selectedExpense} handleSave={handleSave} refreshExpenses={fetchMonthlyExpenseData} />
       <AlertDialog
         open={openAlert}
         handleClose={handleCloseAlert}
@@ -219,15 +222,15 @@ const Dashboard = () => {
         )}
       </Box>
       <Box sx={{ width: '100%', flexGrow: 1 }}>
-        <DataGridComponent 
-        rows={expensesData} 
-        columns={expensesColumn} 
-        loading={fetchingData} 
-        checkboxSelection={!isMobile} 
-        disableColumnMenu={isMobile} 
-        density={isMobile ? 'compact' : 'standard'}
-        hideToolbar={isMobile ? true : false}
-        pageSize={isMobile ? 10 : 5}
+        <DataGridComponent
+          rows={expensesData}
+          columns={expensesColumn}
+          loading={fetchingData}
+          checkboxSelection={!isMobile}
+          disableColumnMenu={isMobile}
+          density={isMobile ? 'compact' : 'standard'}
+          hideToolbar={isMobile ? true : false}
+          pageSize={isMobile ? 10 : 5}
         />
       </Box>
     </Container>
