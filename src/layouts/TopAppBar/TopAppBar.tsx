@@ -8,10 +8,12 @@ import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
 
 import { NavLink, useNavigate } from 'react-router-dom';
 import { StyledAppBar } from './TopAppBarStyles';
+import { useAuth } from '../../context/AuthContext';
 
 const TopAppBar = () => {
 
-    const navigate = useNavigate()
+    const navigate = useNavigate();
+    const { isAuthenticated, login, logout } = useAuth();
 
     const menuItems = [
         {
@@ -46,13 +48,22 @@ const TopAppBar = () => {
                     </NavLink> */}
                     {menuItems?.map(({ label, url, icon }, index) =>
                         <NavLink to={url} key={label + index}>
-                            <IconButton sx={{color: 'white', gap:0.1}}>
+                            <IconButton sx={{ color: 'white', gap: 0.1 }}>
                                 {icon}
                                 <Typography>
                                     {label}
                                 </Typography>
                             </IconButton>
                         </NavLink>
+                    )}
+                    {isAuthenticated ? (
+                        <IconButton sx={{ color: 'white', gap: 0.1 }} onClick={logout}>
+                            <Typography>Logout</Typography>
+                        </IconButton>
+                    ) : (
+                        <IconButton sx={{ color: 'white', gap: 0.1 }} onClick={() => navigate('/login')}>
+                            <Typography>Login</Typography>
+                        </IconButton>
                     )}
                 </Toolbar>
             </AppBar>

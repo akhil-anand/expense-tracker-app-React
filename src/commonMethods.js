@@ -2,7 +2,12 @@ import axios from "axios"
 
 export const addExpenseToDB = async (req) => {
     try {
-        await axios.post('https://shimmering-marsh-raisin.glitch.me/addExpense', req);
+        const token = localStorage.getItem('token');
+        await axios.post('https://shimmering-marsh-raisin.glitch.me/addExpense', req, {
+            headers: {
+                Authorization: token
+            }
+        });
         console.log('Data added successfully');
         return 'success';
     } catch (error) {
@@ -13,16 +18,16 @@ export const addExpenseToDB = async (req) => {
 
 export const fetchExpenseData = async (req, res) => {
     await axios.get('https://shimmering-marsh-raisin.glitch.me/getExpense')
-    .then((res)=> console.log('data fetched successfully', res))
-    .catch((error)=> console.log(error))
+        .then((res) => console.log('data fetched successfully', res))
+        .catch((error) => console.log(error))
     return
 }
 export const fetchMonthlyExpenseData = async (req, res) => {
     await axios.get('https://shimmering-marsh-raisin.glitch.me/getMonthlyExpense')
-    .then((res)=> {
-      console.log('data fetched successfully', res)
-      return res.data
-    })
-    .catch((error)=> console.log(error))
+        .then((res) => {
+            console.log('data fetched successfully', res)
+            return res.data
+        })
+        .catch((error) => console.log(error))
     return
 }

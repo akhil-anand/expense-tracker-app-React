@@ -101,8 +101,12 @@ const Dashboard = () => {
   const fetchMonthlyExpenseData = async () => {
     setFetchingData(true);
     const expenseDate = moment(new Date(currentDate)).format('DD-MM-YYYY');
-
-    await axios.get(`https://shimmering-marsh-raisin.glitch.me/getMonthlyExpense/${expenseDate}`)
+    const token = localStorage.getItem('token');
+    await axios.get(`https://shimmering-marsh-raisin.glitch.me/getMonthlyExpense/${expenseDate}`, {
+      headers: {
+          Authorization: token
+      }
+  })
       .then((res) => {
         let count1 = 0;
         let count2 = 0;
