@@ -20,7 +20,7 @@ const DateCalendarServerRequest = ({ data, _currentDate, _setCurrentDate }: any)
     if (_currentDate) {
       setCurrentDate(dayjs(_currentDate))
     }
-  }, [currentDate])
+  }, [_currentDate])
 
 
   const ServerDay = (props: PickersDayProps<Dayjs> & { highlightedDays?: number[] }) => {
