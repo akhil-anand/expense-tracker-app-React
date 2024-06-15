@@ -7,14 +7,15 @@ const AuthContext = createContext();
 // Provider component that wraps your app and makes auth object available to any child component that calls useAuth()
 export const AuthProvider = ({ children }) => {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
+    const [user, setUser] = useState(null)
 
-
-    useEffect(() => {
+    const authenticateToken = () => {
         const token = localStorage.getItem('token');
         if (token) {
             // Optionally, validate the token (e.g., check expiration)
             try {
                 const decodedToken = jwtDecode(token);
+                setUser(decodedToken)
                 if (decodedToken.exp * 1000 > Date.now()) {
                     setIsAuthenticated(true);
                 } else {
@@ -26,7 +27,12 @@ export const AuthProvider = ({ children }) => {
                 setIsAuthenticated(false);
             }
         }
-    }, []);
+
+    }
+
+    useEffect(() => {
+        authenticateToken()
+    }, [localStorage.getItem('token')]);
 
     const login = (token) => {
         localStorage.setItem('token', token);
@@ -39,7 +45,7 @@ export const AuthProvider = ({ children }) => {
     };
 
     return (
-        <AuthContext.Provider value={{ isAuthenticated, login, logout }}>
+        <AuthContext.Provider value={{ isAuthenticated, login, logout, user }}>
             {children}
         </AuthContext.Provider>
     );

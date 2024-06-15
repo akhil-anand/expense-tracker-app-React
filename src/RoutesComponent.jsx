@@ -7,14 +7,18 @@ import Signup from './layouts/SignUp/SignUp'
 import Login from './layouts/Login/Login'
 
 import { ProtectedAddPayment, ProtectedDashboard } from './ProtectedRoutes';
+import { useAuth } from './context/AuthContext'
 
 const RoutesComponent = () => {
+
+    const { isAuthenticated } = useAuth();
+
     return (
         <BrowserRouter basename="/expense-tracker-app-React">
         <TopAppBar />
             <Routes>
-                <Route path="/login" element={<Login />} />
-                <Route path="/signup" element={<Signup />} />
+            <Route path="/login" element={isAuthenticated ? <Navigate to="/addExpense" /> : <Login />} />
+            <Route path="/signup" element={isAuthenticated ? <Navigate to="/addExpense" /> : <Signup />} />
                 <Route path="/addExpense" element={<ProtectedAddPayment />} />
                 <Route path="/dashboard" element={<ProtectedDashboard />} />
                 <Route path="*" element={<Navigate to="/addExpense" />} />

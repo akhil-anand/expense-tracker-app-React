@@ -1,8 +1,9 @@
-// src/pages/Signup.js
 import React, { useState } from 'react';
 import { Box, Button, Container, IconButton, InputAdornment, TextField, Typography, Grid } from '@mui/material';
 import axios from 'axios';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
+import { LoadingButton } from '@mui/lab';
+import { useNavigate } from 'react-router-dom';
 
 const Signup = () => {
   const [formData, setFormData] = useState({
@@ -15,15 +16,17 @@ const Signup = () => {
   });
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
-
   const [showPassword, setShowPassword] = useState(false);
+  const [isLoading, setIsLoading] = useState(false)
 
-  const handleChange = (e:any) => {
+  const handleChange = (e: any) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
 
-  const handleSubmit = async (e:any) => {
+  const navigate = useNavigate()
+
+  const handleSubmit = async (e: any) => {
     e.preventDefault();
     setError('');
     setSuccess('');
@@ -33,12 +36,26 @@ const Signup = () => {
       return;
     }
 
+    if (formData.password.length < 6) {
+      setError('Password must be at least 6 characters long');
+      return;
+    }
+
     try {
+      setIsLoading(true)
       const response = await axios.post('https://shimmering-marsh-raisin.glitch.me/signup', formData);
-      setSuccess('Signup successful');
+      setSuccess('Sign Up successful');
       setFormData({ preferredName: '', firstName: '', lastName: '', email: '', password: '', confirmPassword: '' });
+      setTimeout(() => {
+        setSuccess('Redirecting to login page...')
+      }, 1000);
+      setTimeout(() => {
+        navigate('/login')
+      }, 3000);
     } catch (error) {
-      setError('Signup failed');
+      setError('Sign Up failed');
+    } finally {
+      setIsLoading(false)
     }
   };
 
@@ -46,8 +63,6 @@ const Signup = () => {
     <Container maxWidth="sm">
       <Box component="form" onSubmit={handleSubmit} sx={{ mt: 4 }}>
         <Typography variant="h4" mb={2}>Sign Up</Typography>
-        {error && <Typography color="error">{error}</Typography>}
-        {success && <Typography color="success">{success}</Typography>}
         <Grid container spacing={2}>
           <Grid item xs={12} md={6}>
             <TextField
@@ -144,14 +159,16 @@ const Signup = () => {
                   </InputAdornment>
                 ),
               }}
-            />
+            />            
           </Grid>
           <Grid item xs={12}>
-            <Button type="submit" variant="contained" color="primary" fullWidth>
+            <LoadingButton loading={isLoading} type="submit" variant="contained" color="primary" fullWidth>
               Sign Up
-            </Button>
+            </LoadingButton>
           </Grid>
         </Grid>
+        {error && <Typography color="error" mb={2} mt={2}>{error}</Typography>}       
+        {success && <Typography color="#14af14" mb={2} mt={2}>{success}</Typography>}
       </Box>
     </Container>
   );
