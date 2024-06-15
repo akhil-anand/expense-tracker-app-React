@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import DataGridComponent from '../../components/data-grid/DataGridComponent';
 import BarChartComponent from '../../components/bar-chart/BarChartComponent';
 import AlertDialog from '../../components/alert-dialog/AlertDialogComponent';
-import { Box, CircularProgress, Container, IconButton, useMediaQuery, useTheme } from '@mui/material';
+import { Box, CircularProgress, Container, IconButton, Typography, useMediaQuery, useTheme } from '@mui/material';
 import moment from 'moment';
 import axios from 'axios';
 import { GridColDef } from '@mui/x-data-grid';
@@ -10,6 +10,12 @@ import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import EditIcon from '@mui/icons-material/Edit';
 import PieChartComponent from '../../components/pie-chart/PieChartComponent';
 import EditExpenseModal from '../../components/edit-expense-modal/EditExpenseModal';
+
+import KeyboardArrowLeftIcon from '@mui/icons-material/KeyboardArrowLeft';
+import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
+import DateCalendarServerRequest from '../../components/spending-calendar/SpendingCalendar';
+
+import CircleIcon from '@mui/icons-material/Circle';
 
 const Dashboard = () => {
   const [currentDate, setCurrentDate] = useState(new Date());
@@ -21,6 +27,8 @@ const Dashboard = () => {
 
   const [selectedExpense, setSelectedExpense] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const [calendarBadges, setCalendarBadges] = useState({})
 
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
@@ -81,6 +89,8 @@ const Dashboard = () => {
     // }
   ];
 
+  const token = localStorage.getItem('token');
+
   if (!isMobile) {
     expensesColumn.push({
       field: 'action',
@@ -96,17 +106,40 @@ const Dashboard = () => {
 
   useEffect(() => {
     fetchMonthlyExpenseData();
-  }, []);
+  }, [currentDate]);
+
+  const sortCalendarBadges = (data_arr: any) => {
+
+    const temp_obj: any = {}
+    const temp_obj_elements: any = {}
+
+    data_arr?.map((date_obj: any) => {
+      temp_obj[new Date(date_obj?.dateOfPurchase).getDate()] = (temp_obj[new Date(date_obj?.dateOfPurchase).getDate()] ?? 0) + Number(date_obj?.price)
+    })
+    Object.keys(temp_obj)?.map((price_date:any) => {
+      console.log(temp_obj?.[price_date])
+      if(temp_obj[price_date] <= 2000){
+        temp_obj_elements[price_date] = <CircleIcon sx={{color:'#149d0295', fontSize:'10px'}}/>
+      }
+      if(temp_obj[price_date] > 2000 || temp_obj?.price_date <= 5000){
+        temp_obj_elements[price_date] = <CircleIcon sx={{color: '#ff550095', fontSize:'10px'}}/>
+      }
+      if(temp_obj[price_date] > 5000){
+        temp_obj_elements[price_date] = <CircleIcon sx={{color: '#ff0000', fontSize:'10px'}}/>
+      }
+    })
+    setCalendarBadges(temp_obj_elements)
+  }
 
   const fetchMonthlyExpenseData = async () => {
     setFetchingData(true);
     const expenseDate = moment(new Date(currentDate)).format('DD-MM-YYYY');
-    const token = localStorage.getItem('token');
+
     await axios.get(`https://shimmering-marsh-raisin.glitch.me/getMonthlyExpense/${expenseDate}`, {
       headers: {
-          Authorization: token
+        Authorization: token
       }
-  })
+    })
       .then((res) => {
         let count1 = 0;
         let count2 = 0;
@@ -114,7 +147,7 @@ const Dashboard = () => {
         let count4 = 0;
 
         const dataGrid_data: any = [];
-
+        sortCalendarBadges(res.data)
         res.data.forEach((item: any, index: any) => {
           dataGrid_data.push({ ...item, id: item?._id ?? index });
           if (item.category === 'Social') {
@@ -154,7 +187,11 @@ const Dashboard = () => {
 
   const handleConfirmDelete = async () => {
     setFetchingData(true);
-    await axios.delete(`https://your-api-url.com/deleteExpense/${deleteId}`)
+    await axios.delete(`https://shimmering-marsh-raisin.glitch.me/deleteExpense/${deleteId}`, {
+      headers: {
+        Authorization: token
+      }
+    })
       .then((res) => {
         console.log('Successfully deleted the expense');
         fetchMonthlyExpenseData();
@@ -182,13 +219,32 @@ const Dashboard = () => {
   const handleSave = async (updatedExpense: any) => {
     setFetchingData(true);
     try {
-      await axios.put(`https://your-api-url.com/updateExpense/${updatedExpense.id}`, updatedExpense);
+      await axios.put(`https://your-api-url.com/updateExpense/${updatedExpense.id}`, updatedExpense, {
+        headers: {
+          Authorization: token
+        }
+      });
       fetchMonthlyExpenseData();
     } catch (error) {
       console.error(error);
       setFetchingData(false);
     }
   };
+
+  const handleMonthChange = (direction: string) => {
+    if (direction === 'next') {
+      setCurrentDate(prevDate => moment(prevDate).add(1, 'month').toDate());
+    } else {
+      setCurrentDate(prevDate => moment(prevDate).subtract(1, 'month').toDate());
+    }
+  };
+
+  const sampleSpendingData = [
+    { date: '2024-06-01', amount: 800 }, // Blue dot
+    { date: '2024-06-05', amount: 1200 }, // Orange dot
+    { date: '2024-06-10', amount: 6000 }, // Red dot
+    // Add more entries as needed
+  ];
 
   return (
     <Container sx={{
@@ -199,11 +255,25 @@ const Dashboard = () => {
       height: '100%',
       padding: isMobile ? '16px' : '32px',
     }}>
+      <Box sx={{ width: '100%', display: 'flex', justifyContent: 'center', mb: 2 }}>
+        <IconButton onClick={() => handleMonthChange('prev')}>
+          <KeyboardArrowLeftIcon />
+          <Typography sx={{ fontSize: 12 }}>Prev</Typography>
+        </IconButton>
+        <Box sx={{ borderRadius: 1 }} style={{ backgroundColor: '#45b6f3' }}>
+          <Typography variant="h6" sx={{ mx: 2, mt: 0.5 }}>{moment(currentDate).format('MMMM YYYY')}</Typography>
+        </Box>
+        <IconButton onClick={() => handleMonthChange('next')}>
+          <Typography sx={{ fontSize: 12 }}>Next</Typography>
+          <KeyboardArrowRightIcon />
+        </IconButton>
+      </Box>
       <EditExpenseModal open={isModalOpen} handleClose={handleModalClose} expense={selectedExpense} handleSave={handleSave} refreshExpenses={fetchMonthlyExpenseData} />
       <AlertDialog
         open={openAlert}
         handleClose={handleCloseAlert}
         handleConfirm={handleConfirmDelete}
+        isLoading={fetchingData}
       />
       <Box sx={{
         display: 'flex',
@@ -240,6 +310,8 @@ const Dashboard = () => {
           pageSize={isMobile ? 10 : 5}
         />
       </Box>
+      {/* <SpendingCalendar spendingData={sampleSpendingData} /> */}
+      <DateCalendarServerRequest data={calendarBadges} _currentDate={currentDate} _setCurrentDate={setCurrentDate}/>
     </Container>
   );
 };

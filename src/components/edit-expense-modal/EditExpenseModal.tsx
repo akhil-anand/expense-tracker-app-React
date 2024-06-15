@@ -10,6 +10,8 @@ import { LoadingButton } from '@mui/lab';
 
 const ExpenseModal = ({ open, handleClose, expense, refreshExpenses }: any) => {
 
+    const token = localStorage.getItem('token');
+
     const [formData, setFormData] = useState<any>({
         price: '',
         category: '',
@@ -45,6 +47,7 @@ const handleDateChange = (date:any) => {
     const month:any = date ? dayjs(date).month() + 1 : ''; // Get month (1-indexed), or empty string if date is null
     const formattedMonth = Number(month) < 10 ? `0${month}` : `${month}`; // Add leading zero if necessary
     const formattedDate = date ? `${date.toDate()}/${formattedMonth}/${date.year()}` : ''; // Format the date string
+    
     setFormData({
         ...formData,
         dateOfPurchase: new Date(date.toDate()),
@@ -58,7 +61,11 @@ const handleDateChange = (date:any) => {
         e.preventDefault();
         setLoading(true);
         try {
-            await axios.put(`https://shimmering-marsh-raisin.glitch.me/updateExpense/${expense._id}`, formData);
+            await axios.put(`https://shimmering-marsh-raisin.glitch.me/updateExpense/${expense._id}`, formData, {
+                headers: {
+                    Authorization: token
+                }
+            });
             handleClose();
             refreshExpenses();
         } catch (error) {

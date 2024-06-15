@@ -1,5 +1,3 @@
-// AlertDialogComponent.jsx
-import React from 'react';
 import {
   Dialog,
   DialogActions,
@@ -8,8 +6,9 @@ import {
   DialogTitle,
   Button
 } from '@mui/material';
+import { LoadingButton } from '@mui/lab';
 
-const AlertDialog = ({ open, handleClose, handleConfirm }) => {
+const AlertDialog = ({ open, handleClose, handleConfirm, isLoading }) => {
   return (
     <Dialog
       open={open}
@@ -27,9 +26,9 @@ const AlertDialog = ({ open, handleClose, handleConfirm }) => {
         <Button onClick={handleClose} color="primary">
           Cancel
         </Button>
-        <Button onClick={handleConfirm} color="secondary" autoFocus>
+        <LoadingButton loading={isLoading} onClick={handleConfirm} color="secondary" autoFocus>
           Delete
-        </Button>
+        </LoadingButton>
       </DialogActions>
     </Dialog>
   );
