@@ -87,7 +87,6 @@ const AddPayment = () => {
                         startAdornment: <InputAdornment position="start">₹</InputAdornment>,
                     }}
                 />
-
                 <CustomTextInput value={formData?.description ?? ''} onChange={(event: any) => handleCategoryChange(event.target.value, 'description')} size='small' label="Enter Description"
                     InputProps={{
                         startAdornment: <InputAdornment position="start">☴</InputAdornment>,
