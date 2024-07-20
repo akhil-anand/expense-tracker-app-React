@@ -97,7 +97,7 @@ const AddPayment = () => {
                         label="Date of Purchase"
                         value={dayjs(formData?.dateOfPurchase)}
                         onChange={(date: any) => handleCategoryChange(new Date(date.toDate()), 'dateOfPurchase')}
-                        slotProps={{ textField: { size: 'small', sx:{ width: '14.6em' } } }}
+                        slotProps={{ textField: { size: 'small', sx:{ width: '14.6em' }}}}
                     />
                 </LocalizationProvider>
                 <CategoryComponent value={formData?.category} updateCategory={handleCategoryChange} />
