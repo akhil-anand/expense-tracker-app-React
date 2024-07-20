@@ -160,7 +160,7 @@ const Dashboard = () => {
             count1 += item.price;
           }
         });
-        setExpensesData(dataGrid_data?.reverse());
+        setExpensesData(dataGrid_data);
         setChartData({
           categories: ['Groceries', 'Utilities', 'Gas', 'Social'],
           values: [count1, count2, count3, count4],

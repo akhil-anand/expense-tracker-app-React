@@ -3,6 +3,10 @@ import { Box, Container, InputAdornment, Typography, useMediaQuery, useTheme } f
 import { CustomTextButton } from '../../components/text-button/TextButton'
 import { CustomTextInput } from '../../components/text-input/TextInput'
 import { useNavigate } from 'react-router-dom'
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { DatePicker } from '@mui/x-date-pickers';
+import dayjs from 'dayjs';
 
 import CategoryComponent from '../../components/category-component/CategoryComponent'
 
@@ -14,29 +18,29 @@ import './AddPayment.css'
 import moment from 'moment'
 
 const AddPayment = () => {
-    const [formData, setFormData] = useState({ amount: 0, category: null, description: null })
+    const [formData, setFormData] = useState({ amount: 0, category: null, description: null, dateOfPurchase: new Date() })
     const [showError, setShowError] = useState('')
     const [isLoading, setIsLoading] = useState(false)
     const navigate = useNavigate()
     const theme = useTheme()
     const isMobile = useMediaQuery(theme.breakpoints.down('sm'))
 
-    const handleSubmit = async (event:any) => {
+    const handleSubmit = async (event: any) => {
         event.preventDefault();
         event.stopPropagation();
-        
+
         setIsLoading(true)
         if (formData?.category && formData?.description && formData?.amount) {
             const response = await addExpenseToDB({
                 price: formData?.amount,
                 category: formData?.category,
                 description: formData?.description,
-                dateOfPurchase: new Date(),
+                dateOfPurchase: formData?.dateOfPurchase,
                 month: new Date().getMonth() < 10 ? ('0' + (new Date().getMonth() + 1)) : (new Date().getMonth() + 1),
                 year: new Date().getFullYear()
             })
             if (response === 'success') {
-                setFormData({ amount: 0, category: null, description: null })
+                setFormData({ amount: 0, category: null, description: null, dateOfPurchase: new Date() })
                 displaySuccessMessage()
             }
         } else {
@@ -52,7 +56,7 @@ const AddPayment = () => {
         }, 5000);
     }
 
-    const handleCategoryChange = (value: string, category: string) => {
+    const handleCategoryChange = (value: string | Date, category: string) => {
         setShowError('')
         if (category) {
             setFormData(prevState => { return { ...prevState, [category]: value } })
@@ -84,11 +88,19 @@ const AddPayment = () => {
                     }}
                 />
 
-                <CustomTextInput value={formData?.description ?? ''} onChange={(event:any) => handleCategoryChange(event.target.value, 'description')} size='small' label="Enter Description"
+                <CustomTextInput value={formData?.description ?? ''} onChange={(event: any) => handleCategoryChange(event.target.value, 'description')} size='small' label="Enter Description"
                     InputProps={{
                         startAdornment: <InputAdornment position="start">☴</InputAdornment>,
                     }}
                 />
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                    <DatePicker
+                        label="Date of Purchase"
+                        value={dayjs(formData?.dateOfPurchase)}
+                        onChange={(date: any) => handleCategoryChange(new Date(date.toDate()), 'dateOfPurchase')}
+                        slotProps={{ textField: { size: 'small', sx:{ width: '14.6em' } } }}
+                    />
+                </LocalizationProvider>
                 <CategoryComponent value={formData?.category} updateCategory={handleCategoryChange} />
                 <Box sx={{ display: 'flex', flexDirection: isMobile ? 'column' : 'row', gap: 2 }}>
                     <LoadingButton loading={isLoading} type='submit' variant="contained" sx={{ borderRadius: 5 }} color="success">
