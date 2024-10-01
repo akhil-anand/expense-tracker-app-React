@@ -29,6 +29,8 @@ const AddPayment = () => {
         event.preventDefault();
         event.stopPropagation();
 
+        const purchaseMonth = formData?.dateOfPurchase ?? new Date()
+
         setIsLoading(true)
         if (formData?.category && formData?.description && formData?.amount) {
             const response = await addExpenseToDB({
@@ -36,7 +38,7 @@ const AddPayment = () => {
                 category: formData?.category,
                 description: formData?.description,
                 dateOfPurchase: formData?.dateOfPurchase,
-                month: (new Date().getMonth() < 9 ? '0' : '') + (new Date().getMonth() + 1),
+                month: (purchaseMonth.getMonth() < 10 ? '0' : '') + (purchaseMonth.getMonth() + 1),
                 year: new Date().getFullYear()
             })
             if (response === 'success') {
