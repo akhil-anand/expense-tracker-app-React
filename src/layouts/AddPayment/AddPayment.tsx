@@ -36,7 +36,7 @@ const AddPayment = () => {
                 category: formData?.category,
                 description: formData?.description,
                 dateOfPurchase: formData?.dateOfPurchase,
-                month: new Date().getMonth() < 10 ? ('0' + (new Date().getMonth() + 1)) : (new Date().getMonth() + 1),
+                month: (new Date().getMonth() < 9 ? '0' : '') + (new Date().getMonth() + 1),
                 year: new Date().getFullYear()
             })
             if (response === 'success') {
